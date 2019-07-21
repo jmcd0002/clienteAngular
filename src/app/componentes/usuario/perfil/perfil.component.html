@@ -1,0 +1,43 @@
+<section id="perfil" class="container">
+  <div class="row mt-5">
+    <div class="col-xs-6 col-sm-6 col-md-6 main-section text-center card">
+      <div class="row user-details">
+        <div class="col-12">
+          <img src="../../../../assets/usuario.png" class="rounded-circle img-thumbnail" style="width:50%" alt="perfil">
+          <h5>{{usuario.nombre}}</h5>
+          <p>{{usuario.clave}}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-6 col-sm-6 col-md-6">
+      <h3>Votaciones guardadas</h3>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Nombre Votacion</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let votacion of votaciones" routerLink="/usuario/votacion/{{votacion.idVotacion}}">
+            <th scope="row">{{votacion.idVotacion}}</th>
+            <td>{{votacion.nombreVotacion}}</td>
+            <td>
+              <a href="/usuario/perfil" class="btn btn-primary btn-sm">
+                Modificar
+              </a>
+            </td>
+            <td>
+              <a href="/usuario/perfil" class="btn btn-danger btn-sm"
+                (click)="onBorrarVotacion(votacion.idVotacion)">Eliminar</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <button type="button" class="btn btn-primary float-right mb-3" data-toggle="modal"
+        data-target="#votacionModal">Añadir votacion</button>
+    </div>
+  </div>
+  <button type="button" class="btn btn-primary float-right mb-3" routerLink="/usuario">Volver</button>
+</section>
+<app-modal></app-modal>
