@@ -1,6 +1,29 @@
 <section id="usuarioRegistrado" class="container">
   <div class="row mt-5">
     <div class="col-xs-6 col-sm-6 col-md-6">
+      <ul class="nav nav-pills">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+            aria-expanded="false">Tipo de metodo</a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" (click)="getListaMetodos('divisor')">Divisor</a>
+            <a class="dropdown-item" (click)="getListaMetodos('quota')">Quota</a>
+          </div>
+        </li>
+      </ul>
+
+      <ul class="nav nav-pills" *ngIf="listaMetodos.length > 0">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+            aria-expanded="false">Metodos</a>
+          <div class="dropdown-menu">
+            <a *ngFor="let metodo of listaMetodos" class="dropdown-item" href="#">{{metodo}}</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <!-- Tabla de votaciones -->
+    <div class="col-xs-6 col-sm-6 col-md-6">
       <h3>Votaciones guardadas</h3>
       <table class="table table-striped">
         <thead>
@@ -20,37 +43,41 @@
       <button type="button" class="btn btn-primary float-right mb-3" data-toggle="modal"
         data-target="#votacionModal">Añadir votacion</button>
     </div>
-    <div class="col-xs-6 col-sm-6 col-md-6">
-      <h3>Votacion {{nombreVotacion}}</h3>
+  </div>
+</section>
+<div class="row mt-5">
+  <!-- Tabla de partidos, votos y escaños -->
+  <div class="col-xs-6 col-sm-6 col-md-6" *ngIf="nombreVotacion">
+    <h3>Votacion {{nombreVotacion}}</h3>
+    <ng-container *ngIf="mapPartidosVotos.size > 0; else elseTemplate">
       <table class="table table-striped">
         <thead>
           <tr>
             <th scope="col">Partidos</th>
             <th scope="col">Votos</th>
+            <th scope="col">Escaños</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let partido of mapPartidosVotos | keyvalue">
             <th scope="row">{{partido.key}}</th>
             <td>{{partido.value}}</td>
+            <td>{{partido.value}}</td>
           </tr>
         </tbody>
       </table>
-    </div>
+    </ng-container>
+    <ng-template #elseTemplate>
+      <div class="alert alert-warning"><strong>Ojo!</strong> Esta tabla no tiene partidos y votos</div>
+    </ng-template>
   </div>
-</section>
-<div class="row mt-5">
-  <div class="col-xs-6 col-sm-6 col-md-6">
-  </div>
-  <div class="col-xs-6 col-sm-6 col-md-6">
-    <div>
-      <div>
-        <div style="display: block">
-          <canvas baseChart [data]="doughnutChartData" [labels]="doughnutChartLabels" [chartType]="doughnutChartType">
-          </canvas>
-        </div>
-      </div>
+  <!-- Grafica -->
+  <div class="col-xs-6 col-sm-6 col-md-6" *ngIf="doughnutChartData.length > 0">
+    <div style="display: block">
+      <canvas baseChart [data]="doughnutChartData" [labels]="doughnutChartLabels" [chartType]="doughnutChartType">
+      </canvas>
     </div>
   </div>
 </div>
+
 <app-modal></app-modal>

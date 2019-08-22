@@ -21,6 +21,7 @@ import { FormsModule } from '@angular/forms';
 // Servicios
 import { VotacionesApiService } from './servicios/votaciones-api.service';
 import { UsuariosApiServiceService } from './servicios/usuarios-api-service.service';
+import { ElectionsApiService } from './servicios/elections-api.service';
 
 // Graficos
 import { ChartsModule } from 'ng2-charts';
@@ -46,7 +47,11 @@ import { ChartsModule } from 'ng2-charts';
     FormsModule,
     ChartsModule
   ],
-  providers: [VotacionesApiService, UsuariosApiServiceService],
+  providers: [
+    VotacionesApiService,
+    UsuariosApiServiceService,
+    ElectionsApiService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
