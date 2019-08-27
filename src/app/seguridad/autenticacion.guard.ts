@@ -1,15 +1,24 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { CanActivate, Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { UsuariosApiServiceService } from '../servicios/usuarios-api-service.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AutenticacionGuard implements CanActivate {
-  canActivate(
-    next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    return true;
+  constructor(
+    private usuariosApi: UsuariosApiServiceService,
+    private router: Router
+  ) {}
+
+  canActivate() {
+    if (this.usuariosApi.getCurrentUser()) {
+      // login true
+      return true;
+    } else {
+      this.router.navigate(['usuario/login']);
+      return false;
+    }
   }
-  
 }

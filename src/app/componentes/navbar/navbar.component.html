@@ -6,23 +6,18 @@
   </button>
 
   <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/votacion">Votaciones</a>
-      </li>
-    </ul>
     <ul class="navbar-nav ml-auto">
-      <li class="nav-item">
+      <li class="nav-item" *ngIf="!isLogged">
         <a class="nav-link" routerLink="usuario/registrar">Registrar</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="usuario/perfil">Perfil</a>
-      </li>
-      <li class="nav-item">
+      <li class="nav-item" *ngIf="!isLogged">
         <a class="nav-link" routerLink="usuario/login">Login</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#" (click)="onLogout()">Logout</a>
+      <li class="nav-item" *ngIf="isLogged">
+        <a class="nav-link" routerLink="usuario/perfil">Perfil</a>
+      </li>
+      <li class="nav-item" *ngIf="isLogged">
+        <a class="nav-link" (click)="onLogout()">Logout</a>
       </li>
     </ul>
   </div>

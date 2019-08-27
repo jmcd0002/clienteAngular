@@ -1,7 +1,7 @@
 import { UsuarioInterfaz } from './usuario-interfaz';
 
 export interface VotacionInterfaz {
-  idVotacion: string;
+  idVotacion: number;
   nombreVotacion: string;
   usuario: UsuarioInterfaz;
   mapPartidosVotos: { [name: string]: number };

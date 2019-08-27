@@ -3,7 +3,6 @@ import { UsuariosApiServiceService } from '../../../servicios/usuarios-api-servi
 import { UsuarioInterfaz } from '../../../modelos/usuario-interfaz';
 import { VotacionesApiService } from '../../../servicios/votaciones-api.service';
 import { VotacionInterfaz } from '../../../modelos/votacion-interfaz';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-perfil',
@@ -13,13 +12,12 @@ import { Router } from '@angular/router';
 export class PerfilComponent implements OnInit {
   constructor(
     private usuarioApi: UsuariosApiServiceService,
-    private votacionesApi: VotacionesApiService,
-    private router: Router
+    private votacionesApi: VotacionesApiService
   ) {}
 
-  private usuario: UsuarioInterfaz;
+  protected usuario: UsuarioInterfaz;
 
-  private votaciones: VotacionInterfaz;
+  protected votaciones: VotacionInterfaz;
 
   ngOnInit() {
     this.usuario = this.usuarioApi.getCurrentUser();
@@ -36,8 +34,9 @@ export class PerfilComponent implements OnInit {
 
   onBorrarVotacion(id: string): void {
     if (confirm('¿Esta seguro de borrar esa votacion?')) {
-      this.votacionesApi.borrarVotacion(id).subscribe();
-      this.router.navigate(['usuario/perfil']);
+      this.votacionesApi
+        .borrarVotacion(id)
+        .subscribe(data => this.getListVotaciones());
     }
     //  else {
     //   this.router.navigate(['usuario/perfil']);

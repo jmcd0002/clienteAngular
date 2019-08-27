@@ -41,9 +41,7 @@ export class VotacionesApiService {
     // TODO obtener token
     // TODO not null
     const usuario = this.usuariosApiServiceService.getCurrentUser();
-    const urlApi = `http://localhost:8080/votacion/${nombreVotacion}/usuario/${
-      usuario.nombre
-    }`;
+    const urlApi = `http://localhost:8080/votacion/${nombreVotacion}/usuario/${usuario.nombre}`;
     return this.http
       .post<VotacionInterfaz>(urlApi, { headers: this.headers })
       .pipe(map(votacion => votacion));
@@ -77,22 +75,51 @@ export class VotacionesApiService {
     return this.http.get(urlApi);
   }
 
-  setCurrentPartidosVotos(mapPartidosVotos: { [name: string]: number }): void {
-    let mapPartidosVotosString = JSON.stringify(mapPartidosVotos);
-    localStorage.setItem('currentMapPartidosVotos', mapPartidosVotosString);
+  anadirPartidoVotos(
+    idVotacion: number,
+    mapPartidosVotos: { [name: string]: number }
+  ) {
+    const urlApi = `http://localhost:8080/votacion/${idVotacion}/partido`;
+    console.log(urlApi, mapPartidosVotos);
+
+    return this.http.post<{ [name: string]: number }>(
+      urlApi,
+      mapPartidosVotos,
+      {
+        headers: this.headers
+      }
+    );
   }
 
-  getCurrentPartidosVotos(): { [name: string]: number } {
-    let mapPartidosVotosString = localStorage.getItem(
-      'currentMapPartidosVotos'
-    );
-    if (!isNullOrUndefined(mapPartidosVotosString)) {
-      let mapPartidosVotos: { [name: string]: number } = JSON.parse(
-        mapPartidosVotosString
-      );
-      return mapPartidosVotos;
-    } else {
-      return null;
+  setCurrentIdVotacion(idVotacion: number): void {
+    const idVotacionString = JSON.stringify(idVotacion);
+    localStorage.setItem('currentIdVotacion', idVotacionString);
+  }
+
+  getCurrentIdVotacion(): number {
+    const idVotacionString = localStorage.getItem('currentIdVotacion');
+    if (!isNullOrUndefined(idVotacionString)) {
+      const idVotacion: number = JSON.parse(idVotacionString);
+      return idVotacion;
     }
   }
+
+  // setCurrentPartidosVotos(mapPartidosVotos: { [name: string]: number }): void {
+  //   let mapPartidosVotosString = JSON.stringify(mapPartidosVotos);
+  //   localStorage.setItem('currentMapPartidosVotos', mapPartidosVotosString);
+  // }
+
+  // getCurrentPartidosVotos(): { [name: string]: number } {
+  //   let mapPartidosVotosString = localStorage.getItem(
+  //     'currentMapPartidosVotos'
+  //   );
+  //   if (!isNullOrUndefined(mapPartidosVotosString)) {
+  //     let mapPartidosVotos: { [name: string]: number } = JSON.parse(
+  //       mapPartidosVotosString
+  //     );
+  //     return mapPartidosVotos;
+  //   } else {
+  //     return null;
+  //   }
+  // }
 }

@@ -1,13 +1,12 @@
-import { Component, OnInit } from "@angular/core";
-import { NgForm } from "@angular/forms";
-import { Location } from "@angular/common";
-import { VotacionesApiService } from "../../servicios/votaciones-api.service";
-import { VotacionInterfaz } from "../../modelos/votacion-interfaz";
+import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { Location } from '@angular/common';
+import { VotacionesApiService } from '../../servicios/votaciones-api.service';
 
 @Component({
-  selector: "app-modal",
-  templateUrl: "./modal.component.html",
-  styleUrls: ["./modal.component.css"]
+  selector: 'app-modal',
+  templateUrl: './modal.component.html',
+  styleUrls: ['./modal.component.css']
 })
 export class ModalComponent implements OnInit {
   constructor(
@@ -15,9 +14,9 @@ export class ModalComponent implements OnInit {
     private location: Location
   ) {}
 
-  private votacion = {
-    idVotacion: "",
-    nombreVotacion: ""
+  protected votacion = {
+    idVotacion: '',
+    nombreVotacion: ''
   };
 
   ngOnInit() {}
@@ -25,15 +24,15 @@ export class ModalComponent implements OnInit {
   onCrearVotacion(votacionForm: NgForm): void {
     if (
       votacionForm.value.idVotacion == null ||
-      votacionForm.value.idVotacion === ""
+      votacionForm.value.idVotacion === ''
     ) {
       // Nueva
       this.votacionesApi
         .crearVotacion(votacionForm.value.nombreVotacion)
-        .subscribe(votacion => location.reload());
+        .subscribe(data => location.reload());
     } else {
       // Modificacion
-      console.log("Modificacion");
+      console.log('Modificacion');
     }
   }
 }

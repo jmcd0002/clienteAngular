@@ -1,12 +1,12 @@
-import { Component, OnInit } from "@angular/core";
-import { UsuariosApiServiceService } from "../../../servicios/usuarios-api-service.service";
-import { UsuarioInterfaz } from "../../../modelos/usuario-interfaz";
-import { Router } from "@angular/router";
+import { Component, OnInit } from '@angular/core';
+import { UsuariosApiServiceService } from '../../../servicios/usuarios-api-service.service';
+import { UsuarioInterfaz } from '../../../modelos/usuario-interfaz';
+import { Router } from '@angular/router';
 
 @Component({
-  selector: "app-registrar",
-  templateUrl: "./registrar.component.html",
-  styleUrls: ["./registrar.component.css"]
+  selector: 'app-registrar',
+  templateUrl: './registrar.component.html',
+  styleUrls: ['./registrar.component.css']
 })
 export class RegistrarComponent implements OnInit {
   constructor(
@@ -15,8 +15,8 @@ export class RegistrarComponent implements OnInit {
   ) {}
 
   private usuario: UsuarioInterfaz = {
-    nombre: "",
-    clave: ""
+    nombre: '',
+    clave: ''
   };
 
   ngOnInit() {}
@@ -28,8 +28,8 @@ export class RegistrarComponent implements OnInit {
         this.usuariosApiService.setCurrentUser(this.usuario);
         const token = this.usuario.nombre;
         this.usuariosApiService.setToken(token);
-        this.router.navigate(["usuario"]);
-        //location.reload();
+        this.router.navigate(['usuario']);
+        // this.router.navigate(['usuario']).then(() => location.reload());
       });
   }
 }

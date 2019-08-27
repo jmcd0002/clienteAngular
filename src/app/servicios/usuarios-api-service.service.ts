@@ -39,6 +39,7 @@ export class UsuariosApiServiceService {
   logoutUsuario() {
     let accessToken = localStorage.getItem('accessToken');
     // const urlApi = `http://localhost:8080/usuario/${accessToken}`; // TODO crear metodo en el servidor
+    localStorage.removeItem('currentIdVotacion');
     localStorage.removeItem('accessToken');
     localStorage.removeItem('currentUser');
     // return this.http.post<UsuarioInterfaz>(urlApi, { headers: this.headers });

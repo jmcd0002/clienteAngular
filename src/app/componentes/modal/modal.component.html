@@ -11,9 +11,10 @@
       </div>
       <div class="modal-body">
         <form class="form-votacion" #formVotacion="ngForm" (ngSubmit)="onCrearVotacion(formVotacion)">
-          <input type="text" id="idVotacion" name="idVotacion" class="form-control" [(ngModel)]="votacion.idVotacion">
+          <input type="text" id="idVotacion" name="idVotacion" class="form-control" [(ngModel)]="votacion.idVotacion"
+            hidden>
           <div class="form-group">
-            <label for="">Nombre</label>
+            <label for="nombreVotacion">Nombre</label>
             <input type="text" id="nombreVotacion" name="nombreVotacion" class="form-control" placeholder="Nombre"
               [(ngModel)]="votacion.nombreVotacion">
           </div>

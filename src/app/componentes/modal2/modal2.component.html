@@ -1,0 +1,43 @@
+<!-- Modal -->
+<div class="modal fade" id="partidosVotosModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Partidos y votos</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="form-partidos-votos" [formGroup]="formuarioPartidosVotos"
+          (ngSubmit)="onAddPartidoVotos(formuarioPartidosVotos.value)">
+          <div class="row">
+            <div class="col">
+              <label for="partido">Partido:</label>
+            </div>
+            <div class="col">
+              <label for="votos">Votos:</label>
+            </div>
+          </div>
+          <div formArrayName="arrayPartidosVotos" *ngFor="let item of getInputs.controls; let i = index;">
+            <div [formGroupName]="i" class="row">
+              <div class="col">
+                <input formControlName="partido" type="text" class="form-control" id="partido">
+              </div>
+              <div class="col">
+                <input formControlName="votos" type="number" class="form-control" id="votos">
+              </div>
+            </div>
+            <a class="btn btn-link" (click)="removeInputs(i)">remove</a>
+          </div>
+          <a class="btn btn-link" (click)="addInputs()">Add</a>
+          <button type="submit" class="btn btn-primary">Aceptar</button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

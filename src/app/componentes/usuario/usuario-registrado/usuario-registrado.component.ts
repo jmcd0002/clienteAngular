@@ -10,6 +10,7 @@ import { ElectionsApiService } from '../../../servicios/elections-api.service';
 // Graficas
 import { ChartType } from 'chart.js';
 import { Label } from 'ng2-charts';
+import { FormGroup, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-usuario-registrado',
@@ -17,33 +18,38 @@ import { Label } from 'ng2-charts';
   styleUrls: ['./usuario-registrado.component.css']
 })
 export class UsuarioRegistradoComponent implements OnInit {
-  // Grafica Doughnut
-  public doughnutChartLabels: Label[] = [];
+  protected listaMetodos: Array<string>;
 
-  public doughnutChartData: number[] = [];
+  formularioReparto: FormGroup;
 
-  public doughnutChartType: ChartType = 'doughnut';
+  protected votacion: VotacionInterfaz;
 
-  // Otros atributos
   protected votaciones: VotacionInterfaz[];
 
-  protected mapPartidosVotos = new Map<string, number>();
+  protected mapPartidosVotos: { [name: string]: number } = null;
+
+  protected mapPartidosEsc: { [name: string]: number } = null;
 
   protected nombreVotacion = '';
 
-  protected metodoSeleccionado = '';
-
-  protected listaMetodos = new Array<string>();
+  // Grafica Doughnut
+  public doughnutChartType: ChartType = 'doughnut';
+  public doughnutChartLabels: Label[] = [];
+  public doughnutChartData: number[] = [];
 
   constructor(
     private votacionesApi: VotacionesApiService,
-    private electionsApi: ElectionsApiService // private location: Location
+    private electionsApi: ElectionsApiService, // private location: Location
+    private fb: FormBuilder
   ) {}
 
   ngOnInit() {
     this.getListVotaciones();
-    // this.getListaMetodos('divisor');
-    this.computarReparto('Webber', 16);
+
+    this.formularioReparto = this.fb.group({
+      metodo: [''],
+      esc: [0]
+    });
   }
 
   getListaMetodos(tipo: string): void {
@@ -54,14 +60,6 @@ export class UsuarioRegistradoComponent implements OnInit {
       .subscribe(
         (listaMetodos: Array<string>) => (this.listaMetodos = listaMetodos)
       );
-    //   .subscribe((listaMetodos: Array<string>) => {
-    //     for (const key in listaMetodos) {
-    //     if (listaMetodos.hasOwnProperty(key)) {
-    //       this.listaMetodos.push(listaMetodos[key]);
-    //       // console.log(this.listaMetodos);
-    //     }
-    //   }
-    // });
   }
 
   getListVotaciones(): void {
@@ -72,41 +70,41 @@ export class UsuarioRegistradoComponent implements OnInit {
       );
   }
 
-  getPartidosVotos(idVotacion: number, nombreVotacion: string): void {
-    this.nombreVotacion = nombreVotacion;
-    this.mapPartidosVotos.clear();
+  getPartidosVotos(votacion: VotacionInterfaz): void {
+    this.mapPartidosEsc = null;
+    this.nombreVotacion = votacion.nombreVotacion;
 
-    this.votacionesApi
-      .getPartidosVotos(idVotacion)
-      .subscribe((mapPartidosVotos: { [name: string]: number }) => {
-        for (const key in mapPartidosVotos) {
-          if (mapPartidosVotos.hasOwnProperty(key)) {
-            this.mapPartidosVotos.set(key, mapPartidosVotos[key]);
-          }
-        }
-        this.votacionesApi.setCurrentPartidosVotos(mapPartidosVotos);
-      });
+    if (Object.keys(votacion.mapPartidosVotos).length > 0) {
+      this.mapPartidosVotos = votacion.mapPartidosVotos;
+    } else {
+      this.mapPartidosVotos = null;
+    }
+
+    this.votacionesApi.setCurrentIdVotacion(votacion.idVotacion);
   }
 
-  computarReparto(metodoSeleccionado: string, esc: number): void {
+  computarReparto(formValue: any): void {
     this.doughnutChartLabels = [];
     this.doughnutChartData = [];
 
-    this.electionsApi
-      .computarReparto(
-        this.votacionesApi.getCurrentPartidosVotos(),
-        metodoSeleccionado,
-        esc
-      )
-      .subscribe((mapPartidosEsc: { [name: string]: number }) => {
-        console.log(mapPartidosEsc);
-        for (const key in mapPartidosEsc) {
-          if (mapPartidosEsc.hasOwnProperty(key)) {
-            this.doughnutChartLabels.push(key);
-            this.doughnutChartData.push(mapPartidosEsc[key]);
+    // console.log(this.mapPartidosVotos, formValue.metodo, formValue.esc);
+    if (
+      Object.keys(this.mapPartidosVotos).length > 0 &&
+      formValue.esc > 0 &&
+      formValue.metodo
+    ) {
+      this.electionsApi
+        .computarReparto(this.mapPartidosVotos, formValue.metodo, formValue.esc)
+        .subscribe((mapPartidosEsc: { [name: string]: number }) => {
+          this.mapPartidosEsc = mapPartidosEsc;
+          console.log(this.mapPartidosEsc);
+          for (const key in mapPartidosEsc) {
+            if (mapPartidosEsc.hasOwnProperty(key)) {
+              this.doughnutChartLabels.push(key);
+              this.doughnutChartData.push(mapPartidosEsc[key]);
+            }
           }
-        }
-      });
-    localStorage.removeItem('currentMapPartidosVotos');
+        });
+    }
   }
 }

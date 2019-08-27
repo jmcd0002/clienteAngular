@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UsuariosApiServiceService } from '../../../servicios/usuarios-api-service.service';
 import { UsuarioInterfaz } from '../../../modelos/usuario-interfaz';
 import { Router } from '@angular/router';
+// import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +13,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private usuariosApiService: UsuariosApiServiceService,
     private router: Router
-  ) {}
+  ) // private location: Location
+  {}
 
   private usuario: UsuarioInterfaz = {
     nombre: '',
@@ -30,6 +32,7 @@ export class LoginComponent implements OnInit {
           const token = usuario.nombre;
           this.usuariosApiService.setToken(token);
           this.router.navigate(['usuario']);
+          // this.router.navigate(['usuario']).then(() => location.reload());
         },
         error => console.log(error)
       );
