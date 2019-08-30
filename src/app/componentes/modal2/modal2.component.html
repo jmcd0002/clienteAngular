@@ -21,22 +21,24 @@
             </div>
           </div>
           <div formArrayName="arrayPartidosVotos" *ngFor="let item of getInputs.controls; let i = index;">
-            <div [formGroupName]="i" class="row">
+            <div [formGroupName]="i" class="row mb-3">
               <div class="col">
                 <input formControlName="partido" type="text" class="form-control" id="partido">
               </div>
               <div class="col">
                 <input formControlName="votos" type="number" class="form-control" id="votos">
               </div>
+              <button type="button" class="close" aria-label="Close" (click)="removeInputs(i)">
+                <span aria-hidden="true">&times;</span>
+              </button>
             </div>
-            <a class="btn btn-link" (click)="removeInputs(i)">remove</a>
           </div>
-          <a class="btn btn-link" (click)="addInputs()">Add</a>
-          <button type="submit" class="btn btn-primary">Aceptar</button>
+          <button class="btn btn-outline-primary" (click)="addInputs()">Añadir</button>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Aceptar</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+          </div>
         </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>

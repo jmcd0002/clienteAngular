@@ -1,3 +1,95 @@
-<p>
-  usuari-no-registrado works!
-</p>
+<form [formGroup]="formularioReparto" (ngSubmit)="computarReparto(formularioReparto.value)">
+  <div class="row mt-5">
+    <div class="col-xs-6 col-sm-6 col-md-6">
+      <h3 class="h3 mb-3 font-weight-normal text-center">Parametros</h3>
+      <div class="form-group">
+        <label for="tipoMetodo">Tipo de metodo</label>
+        <select class="form-control" id="tipoMetodo" (change)="getListaMetodos($event.target.value)">
+          <option disabled selected>Selecciona un tipo de metodo</option>
+          <option [value]="'divisor'">Divisor</option>
+          <option [value]="'quota'">Quota</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="metodo">Metodo</label>
+        <select class="form-control" id="metodo" formControlName="metodo">
+          <option disabled selected>Selecciona un metodo</option>
+          <option *ngFor="let metodo of listaMetodos" [value]="metodo">
+            <span>{{metodo}}</span>
+          </option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="esc">Numero de escaños</label>
+        <input class="form-control" type="number" id="esc" formControlName="esc" placeholder="Escaños" required>
+      </div>
+
+    </div>
+
+    <div class="col-xs-6 col-sm-6 col-md-6">
+      <h3 class="h3 mb-3 font-weight-normal text-center">Partidos y Votos</h3>
+      <div class="row">
+        <div class="col">
+          <label for="partido">Partido:</label>
+        </div>
+        <div class="col">
+          <label for="votos">Votos:</label>
+        </div>
+      </div>
+      <div formArrayName="arrayPartidosVotos" *ngFor="let item of getInputs.controls; let i = index;">
+        <div [formGroupName]="i" class="row mb-5">
+          <div class="col">
+            <input formControlName="partido" type="text" class="form-control" id="partido">
+          </div>
+          <div class="col">
+            <input formControlName="votos" type="number" class="form-control" id="votos">
+          </div>
+          <button type="button" class="close" aria-label="Close" (click)="removeInputs(i)">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      </div>
+      <div class="text-right">
+        <button class="btn btn-outline-primary" (click)="addInputs()">Añadir</button>
+      </div>
+    </div>
+  </div>
+  <button type="submit" class="btn btn-lg btn-primary btn-block">Calcular Reparto</button>
+  <button (click)="ngOnInit()" class="btn btn-lg btn-default btn-block">Limpiar simulación</button>
+</form>
+
+<div class="row mt-5">
+  <!-- Tabla de partidos, votos y escaños -->
+  <div class="col-xs-6 col-sm-6 col-md-6" *ngIf="doughnutChartData.length > 0">
+    <h3 class="h3 mb-3 font-weight-normal text-center">Tabla Simulación</h3>
+    <div *ngIf="mapPartidosVotos">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Partidos</th>
+            <th scope="col">Votos</th>
+            <th scope="col" *ngIf="mapPartidosEsc">Escaños</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let partido of mapPartidosVotos | keyvalue">
+            <th scope="row">{{partido.key}}</th>
+            <td>{{partido.value}}</td>
+            <td *ngIf="mapPartidosEsc">{{mapPartidosEsc[partido.key]}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <!-- Grafica -->
+  <div class="col-xs-6 col-sm-6 col-md-6" *ngIf="doughnutChartData.length > 0">
+    <h3 class="h3 mb-3 font-weight-normal text-center">Gráfica Simulación</h3>
+    <div style="display: block">
+      <canvas baseChart [data]="doughnutChartData" [labels]="doughnutChartLabels" [chartType]="doughnutChartType">
+      </canvas>
+    </div>
+  </div>
+</div>
+
+<app-modal></app-modal>
+<app-modal2></app-modal2>

@@ -47,7 +47,7 @@ export class UsuarioRegistradoComponent implements OnInit {
     this.getListVotaciones();
 
     this.formularioReparto = this.fb.group({
-      metodo: [''],
+      metodo: ['Selecciona un metodo'],
       esc: [0]
     });
   }

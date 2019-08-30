@@ -13,7 +13,7 @@ export class AppComponent {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         // if (event.url.match('/usuario')) {
-        if (event.url === '/usuario' || event.url === '/usuario/perfil') {
+        if (event.url === '/usuario' || event.url === '/usuario/perfil' || event.url === '/simulacion') {
           this.hideElement = true;
         } else {
           this.hideElement = false;
